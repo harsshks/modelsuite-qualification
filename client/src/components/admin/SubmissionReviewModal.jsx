@@ -1,4 +1,6 @@
-﻿import { reviewSubmission } from '../../api/submissions';
+import { useState } from 'react';
+import { reviewSubmission } from '../../api/submissions';
+import Avatar from '../Avatar';
 
 const REVIEW_STATUS_CLASS = {
   Pending:  'status-badge-Submitted',
@@ -7,14 +9,18 @@ const REVIEW_STATUS_CLASS = {
 };
 
 const SubmissionReviewModal = ({ submission, onClose, onReviewed }) => {
+  const [loading, setLoading] = useState(false);
 
   const handleReview = async (status) => {
+    setLoading(true);
     try {
       await reviewSubmission(submission._id, status);
       onReviewed();
       onClose();
     } catch (err) {
       alert(err.response?.data?.message || 'Review action failed');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -57,9 +63,7 @@ const SubmissionReviewModal = ({ submission, onClose, onReviewed }) => {
 
           {/* Talent info */}
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full avatar-talent flex items-center justify-center text-[13px] font-bold text-white shrink-0">
-              {talent.name?.[0] ?? 'T'}
-            </div>
+            <Avatar name={talent.name || 'T'} size={36} variant="talent" />
             <div>
               <p className="text-[14px] font-medium text-text-primary">{talent.name || 'Unknown Talent'}</p>
               <p className="text-[12px] text-text-faint">{talent.email || '—'}</p>
@@ -105,13 +109,13 @@ const SubmissionReviewModal = ({ submission, onClose, onReviewed }) => {
               className="flex-1 py-2.5 bg-bg-input text-text-muted border border-border rounded-lg text-sm font-medium cursor-pointer hover:bg-bg-hover hover:text-text-primary transition-all font-sans">
               Cancel
             </button>
-            <button onClick={() => handleReview('Rejected')}
-              className="flex-1 py-2.5 bg-danger/10 text-danger border border-danger/30 rounded-lg text-sm font-semibold cursor-pointer hover:bg-danger/20 transition-all font-sans">
-              ✕ Reject
+            <button onClick={() => handleReview('Rejected')} disabled={loading}
+              className={`flex-1 py-2.5 bg-danger/10 text-danger border border-danger/30 rounded-lg text-sm font-semibold cursor-pointer hover:bg-danger/20 transition-all font-sans flex items-center justify-center gap-1.5 ${loading ? 'btn-loading' : ''}`}>
+              {loading ? <span className="spinner spinner-sm" style={{ borderTopColor: 'currentColor' }} /> : '✕'} Reject
             </button>
-            <button onClick={() => handleReview('Approved')}
-              className="flex-1 py-2.5 bg-success/10 text-success border border-success/30 rounded-lg text-sm font-semibold cursor-pointer hover:bg-success/20 transition-all font-sans">
-              ✓ Approve
+            <button onClick={() => handleReview('Approved')} disabled={loading}
+              className={`flex-1 py-2.5 bg-success/10 text-success border border-success/30 rounded-lg text-sm font-semibold cursor-pointer hover:bg-success/20 transition-all font-sans flex items-center justify-center gap-1.5 ${loading ? 'btn-loading' : ''}`}>
+              {loading ? <span className="spinner spinner-sm" style={{ borderTopColor: 'currentColor' }} /> : '✓'} Approve
             </button>
           </div>
         </div>

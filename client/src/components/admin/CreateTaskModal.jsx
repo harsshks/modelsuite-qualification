@@ -1,5 +1,6 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import { createTask, fetchTalents } from '../../api/tasks';
+import RichTextEditor from '../RichTextEditor';
 
 const STATUS_OPTIONS = ['Open', 'Claimed', 'Submitted', 'Approved', 'Rejected'];
 
@@ -10,6 +11,7 @@ const CreateTaskModal = ({ onClose, onCreated }) => {
   const [form, setForm] = useState({ title: '', description: '', status: 'Open', assignedTo: '', dueDate: '' });
   const [talents, setTalents] = useState([]);
   const [loadingTalents, setLoadingTalents] = useState(false);
+  const [loading, setLoading] = useState(false);
   useState(() => {
     setLoadingTalents(true);
     fetchTalents()
@@ -22,12 +24,15 @@ const CreateTaskModal = ({ onClose, onCreated }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const { data } = await createTask({ ...form, assignedTo: form.assignedTo || undefined });
       onCreated(data);
       onClose();
     } catch (err) {
       alert(err.response?.data?.message || 'Failed to create task');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -55,8 +60,11 @@ const CreateTaskModal = ({ onClose, onCreated }) => {
 
           <div className="flex flex-col gap-1.5">
             <label className={labelCls}>Description</label>
-            <textarea name="description" value={form.description} onChange={handleChange}
-              rows={3} placeholder="Describe the task deliverables..." className={inputCls} />
+            <RichTextEditor
+              value={form.description}
+              onChange={(html) => setForm((p) => ({ ...p, description: html }))}
+              placeholder="Describe the task deliverables..."
+            />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
@@ -90,9 +98,10 @@ const CreateTaskModal = ({ onClose, onCreated }) => {
               className="px-5 py-2.5 bg-bg-input text-text-muted border border-border rounded-lg text-sm font-medium cursor-pointer hover:bg-bg-hover hover:text-text-primary transition-all font-sans">
               Cancel
             </button>
-            <button type="submit"
-              className="px-5 py-2.5 rounded-lg text-sm font-semibold text-white cursor-pointer btn-gradient border-none font-sans">
-              Create Task
+            <button type="submit" disabled={loading}
+              className={`px-5 py-2.5 rounded-lg text-sm font-semibold text-white cursor-pointer btn-gradient border-none font-sans flex items-center justify-center gap-2 ${loading ? 'btn-loading' : ''}`}>
+              {loading && <span className="spinner spinner-sm" />}
+              {loading ? 'Creating…' : 'Create Task'}
             </button>
           </div>
         </form>

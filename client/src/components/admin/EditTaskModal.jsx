@@ -1,5 +1,6 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import { updateTask, fetchTalents } from '../../api/tasks';
+import RichTextEditor from '../RichTextEditor';
 
 const STATUS_OPTIONS = ['Open', 'Claimed', 'Submitted', 'Approved', 'Rejected'];
 const inputCls = 'w-full bg-bg-input border border-border rounded-lg px-3.5 py-2.5 text-sm text-text-primary outline-none placeholder:text-[#4e4a6e] focus:border-primary focus:ring-[3px] focus:ring-primary/15 transition-all font-sans resize-y';
@@ -14,6 +15,7 @@ const EditTaskModal = ({ task, onClose, onUpdated }) => {
     dueDate:     task.dueDate     || '',
   });
   const [talents, setTalents] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useState(() => {
     fetchTalents().then(({ data }) => setTalents(data)).catch(() => {});
@@ -23,12 +25,15 @@ const EditTaskModal = ({ task, onClose, onUpdated }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const { data } = await updateTask(task._id, { ...form, assignedTo: form.assignedTo || null });
       onUpdated(data);
       onClose();
     } catch (err) {
       alert(err.response?.data?.message || 'Failed to update task');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -52,7 +57,11 @@ const EditTaskModal = ({ task, onClose, onUpdated }) => {
 
           <div className="flex flex-col gap-1.5">
             <label className={labelCls}>Description</label>
-            <textarea name="description" value={form.description} onChange={handleChange} rows={3} className={inputCls} />
+            <RichTextEditor
+              value={form.description}
+              onChange={(html) => setForm((p) => ({ ...p, description: html }))}
+              placeholder="Describe the task deliverables..."
+            />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
@@ -83,9 +92,10 @@ const EditTaskModal = ({ task, onClose, onUpdated }) => {
               className="px-5 py-2.5 bg-bg-input text-text-muted border border-border rounded-lg text-sm font-medium cursor-pointer hover:bg-bg-hover hover:text-text-primary transition-all font-sans">
               Cancel
             </button>
-            <button type="submit"
-              className="px-5 py-2.5 rounded-lg text-sm font-semibold text-white cursor-pointer btn-gradient border-none font-sans">
-              Save Changes
+            <button type="submit" disabled={loading}
+              className={`px-5 py-2.5 rounded-lg text-sm font-semibold text-white cursor-pointer btn-gradient border-none font-sans flex items-center justify-center gap-2 ${loading ? 'btn-loading' : ''}`}>
+              {loading && <span className="spinner spinner-sm" />}
+              {loading ? 'Saving…' : 'Save Changes'}
             </button>
           </div>
         </form>

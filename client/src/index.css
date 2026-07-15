@@ -477,3 +477,105 @@ input, select, textarea {
   color: #EF4444;
   background: rgba(239,68,68,0.1);
 }
+
+/* ─────────────────────────────────────────
+   Loading Spinner
+───────────────────────────────────────── */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255,255,255,0.25);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  flex-shrink: 0;
+}
+.spinner-sm {
+  width: 14px;
+  height: 14px;
+  border-width: 1.5px;
+}
+
+/* Disabled / loading button state */
+.btn-loading {
+  opacity: 0.7;
+  cursor: not-allowed !important;
+  pointer-events: none;
+  transform: none !important;
+}
+
+/* ─────────────────────────────────────────
+   Rich Text Editor (Quill) – Dark Theme
+───────────────────────────────────────── */
+.rich-text-editor .ql-toolbar.ql-snow {
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px 8px 0 0;
+  background: rgba(255,255,255,0.03);
+  padding: 6px 8px;
+}
+.rich-text-editor .ql-container.ql-snow {
+  border: 1px solid rgba(255,255,255,0.1);
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  background: var(--bg-input, #0a0a14);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  color: #E5E2E1;
+  min-height: 120px;
+}
+.rich-text-editor .ql-editor {
+  min-height: 100px;
+  padding: 12px 14px;
+  line-height: 1.65;
+}
+.rich-text-editor .ql-editor.ql-blank::before {
+  color: #4e4a6e;
+  font-style: normal;
+}
+/* Toolbar icons & controls */
+.rich-text-editor .ql-snow .ql-stroke { stroke: #9CA3AF; }
+.rich-text-editor .ql-snow .ql-fill   { fill: #9CA3AF; }
+.rich-text-editor .ql-snow .ql-picker-label { color: #9CA3AF; }
+.rich-text-editor .ql-snow .ql-picker-options {
+  background: #111118;
+  border-color: rgba(255,255,255,0.1);
+  border-radius: 8px;
+  padding: 4px;
+}
+.rich-text-editor .ql-snow .ql-picker-item { color: #9CA3AF; }
+.rich-text-editor .ql-snow .ql-picker-item:hover,
+.rich-text-editor .ql-snow .ql-picker-item.ql-selected { color: #60A5FA; }
+.rich-text-editor .ql-snow button:hover .ql-stroke,
+.rich-text-editor .ql-snow .ql-active .ql-stroke { stroke: #60A5FA; }
+.rich-text-editor .ql-snow button:hover .ql-fill,
+.rich-text-editor .ql-snow .ql-active .ql-fill { fill: #60A5FA; }
+.rich-text-editor .ql-toolbar.ql-snow .ql-formats { margin-right: 10px; }
+/* Focus ring */
+.rich-text-editor .ql-container.ql-snow:focus-within {
+  border-color: var(--primary, #3B82F6);
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+}
+/* Rich content display */
+.rich-description {
+  font-size: 13px;
+  line-height: 1.65;
+  color: #9CA3AF;
+}
+.rich-description h1, .rich-description h2, .rich-description h3 {
+  color: #E5E2E1;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+.rich-description ul, .rich-description ol {
+  padding-left: 18px;
+  margin: 4px 0;
+}
+.rich-description a {
+  color: #60A5FA;
+  text-decoration: underline;
+}
+.rich-description p { margin: 2px 0; }

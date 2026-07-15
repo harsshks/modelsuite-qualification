@@ -1,4 +1,4 @@
-﻿const Task = require('../models/Task');
+const Task = require('../models/Task');
 
 // @desc  Get all available (Open) tasks
 // @route GET /api/talent/tasks/available
@@ -36,25 +36,28 @@ const getMyTasks = async (req, res) => {
 // @access Talent
 const claimTask = async (req, res) => {
   try {
-    // Two talents can both pass the status === 'Open' check before either saves,
-    // then both write Claimed. Proper fix: findOneAndUpdate({ _id, status: 'Open' })
-    const task = await Task.findById(req.params.id);
+    // Atomic update: only succeeds if the task is still 'Open'
+    // This prevents race conditions where two talents claim simultaneously
+    const task = await Task.findOneAndUpdate(
+      { _id: req.params.id, status: 'Open' },
+      { status: 'Claimed', assignedTo: req.user._id },
+      { new: true }
+    );
 
     if (!task) {
-      return res.status(404).json({ message: 'Task not found' });
+      // Either the task doesn't exist or it was already claimed
+      const exists = await Task.findById(req.params.id);
+      if (!exists) {
+        return res.status(404).json({ message: 'Task not found' });
+      }
+      return res.status(409).json({ message: 'Task is no longer available — it may have been claimed by another talent' });
     }
-
-    if (task.status !== 'Open') {
-      return res.status(400).json({ message: 'Task is no longer available' });
-    }
-    task.status = 'Claimed';
-    task.assignedTo = req.user._id;
-    await task.save();
 
     res.json(task);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 module.exports = { getAvailableTasks, getMyTasks, claimTask };

@@ -1,4 +1,5 @@
-﻿import { claimTask } from '../../api/talent';
+import { useState } from 'react';
+import { claimTask } from '../../api/talent';
 
 const STATUS_CLASS = {
   Open:      'status-badge-Open',
@@ -9,13 +10,17 @@ const STATUS_CLASS = {
 };
 
 const TaskCard = ({ task, showClaimButton = false, onClaimed }) => {
+  const [loading, setLoading] = useState(false);
 
   const handleClaim = async () => {
+    setLoading(true);
     try {
       await claimTask(task._id);
       if (onClaimed) onClaimed();
     } catch (err) {
       alert(err.response?.data?.message || 'Failed to claim task');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -34,7 +39,8 @@ const TaskCard = ({ task, showClaimButton = false, onClaimed }) => {
 
       
       {task.description && (
-        <p className="text-[13px] text-text-muted leading-relaxed">{task.description}</p>
+        <div className="text-[13px] text-text-muted leading-relaxed rich-description"
+          dangerouslySetInnerHTML={{ __html: task.description }} />
       )}
 
       {/* Meta row */}
@@ -49,9 +55,10 @@ const TaskCard = ({ task, showClaimButton = false, onClaimed }) => {
       </div>
 
       {showClaimButton && (
-        <button onClick={handleClaim}
-          className="w-full py-2.5 rounded-lg border-none text-[13px] font-semibold text-white cursor-pointer btn-gradient font-sans mt-1">
-          Claim Task →
+        <button onClick={handleClaim} disabled={loading}
+          className={`w-full py-2.5 rounded-lg border-none text-[13px] font-semibold text-white cursor-pointer btn-gradient font-sans mt-1 flex items-center justify-center gap-2 ${loading ? 'btn-loading' : ''}`}>
+          {loading && <span className="spinner spinner-sm" />}
+          {loading ? 'Claiming…' : 'Claim Task →'}
         </button>
       )}
     </div>

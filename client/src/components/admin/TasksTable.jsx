@@ -1,4 +1,5 @@
 import { deleteTask } from '../../api/tasks';
+import Avatar from '../Avatar';
 
 /* ── SVG Action Icons ── */
 const IconEdit = () => (
@@ -13,14 +14,9 @@ const IconDelete = () => (
   </svg>
 );
 
-/* ── Avatar color map ── */
-const AVATAR_COLORS = [
-  'linear-gradient(135deg,#3B82F6,#2563EB)',
-  'linear-gradient(135deg,#8B5CF6,#7C3AED)',
-  'linear-gradient(135deg,#10B981,#059669)',
-  'linear-gradient(135deg,#F59E0B,#D97706)',
-];
-const getAvatarGradient = (name = '') => AVATAR_COLORS[name.charCodeAt(0) % AVATAR_COLORS.length];
+
+/* ── Strip HTML tags for truncated plain-text preview ── */
+const stripHtml = (html = '') => html.replace(/<[^>]*>/g, '').trim();
 
 /* ── Date formatter ── */
 const fmtDate = (raw) => {
@@ -92,7 +88,7 @@ const TasksTable = ({ tasks, onEdit, onRefresh }) => {
                 </span>
                 {task.description && (
                   <span className="block truncate" style={{ color: '#4B5563', fontSize: '12px', maxWidth: '240px' }}>
-                    {task.description}
+                    {stripHtml(task.description)}
                   </span>
                 )}
               </td>
@@ -108,18 +104,10 @@ const TasksTable = ({ tasks, onEdit, onRefresh }) => {
               {/* Assigned to */}
               <td className="table-td" style={{ whiteSpace: 'nowrap' }}>
                 {task.assignedTo ? (
-                  <div className="flex items-center gap-2">
-                    <div
-                      className="flex items-center justify-center text-[11px] font-bold text-white shrink-0"
-                      style={{
-                        width: '26px', height: '26px', borderRadius: '50%',
-                        background: getAvatarGradient(task.assignedTo.name || ''),
-                        fontFamily: 'Inter, sans-serif',
-                      }}>
-                      {task.assignedTo.name?.[0]?.toUpperCase()}
+                    <div className="flex items-center gap-2">
+                      <Avatar name={task.assignedTo.name || ''} size={26} />
+                      <span style={{ color: '#E5E2E1' }}>{task.assignedTo.name}</span>
                     </div>
-                    <span style={{ color: '#E5E2E1' }}>{task.assignedTo.name}</span>
-                  </div>
                 ) : (
                   <span style={{ color: '#4B5563', fontSize: '13px' }}>Unassigned</span>
                 )}
