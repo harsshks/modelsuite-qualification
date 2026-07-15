@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import CustomSelect from '../components/CustomSelect';
 import API from '../api/axios';
 
 const Logo = () => (
@@ -66,11 +67,16 @@ const RegisterPage = () => {
 
           <div className="flex flex-col gap-2 group">
             <label className={labelCls} htmlFor="role">Role</label>
-            <select id="role" value={role} onChange={(e) => setRole(e.target.value)}
-              className={`${inputCls} custom-select cursor-pointer`}>
-              <option value="Talent">Talent</option>
-              <option value="Admin">Admin</option>
-            </select>
+            <CustomSelect
+              name="role"
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              options={[
+                { value: 'Talent', label: 'Talent' },
+                { value: 'Admin', label: 'Admin' }
+              ]}
+              placeholder="Select role"
+            />
           </div>
 
           <button type="submit" disabled={loading}

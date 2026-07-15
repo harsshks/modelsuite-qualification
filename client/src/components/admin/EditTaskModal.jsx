@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { updateTask, fetchTalents } from '../../api/tasks';
 import RichTextEditor from '../RichTextEditor';
+import CustomSelect from '../CustomSelect';
 
 const STATUS_OPTIONS = ['Open', 'Claimed', 'Submitted', 'Approved', 'Rejected'];
 const inputCls = 'w-full bg-bg-input border border-border rounded-lg px-3.5 py-2.5 text-sm text-text-primary outline-none placeholder:text-[#4e4a6e] focus:border-primary focus:ring-[3px] focus:ring-primary/15 transition-all font-sans resize-y';
@@ -67,10 +68,13 @@ const EditTaskModal = ({ task, onClose, onUpdated }) => {
           <div className="grid grid-cols-2 gap-4">
             <div className="flex flex-col gap-1.5">
               <label className={labelCls}>Status</label>
-              <select name="status" value={form.status} onChange={handleChange}
-                className={`${inputCls} custom-select cursor-pointer`}>
-                {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s}</option>)}
-              </select>
+              <CustomSelect
+                name="status"
+                value={form.status}
+                onChange={handleChange}
+                options={STATUS_OPTIONS.map(s => ({ value: s, label: s }))}
+                placeholder="Select status"
+              />
             </div>
             <div className="flex flex-col gap-1.5">
               <label className={labelCls}>Due Date</label>
@@ -80,11 +84,16 @@ const EditTaskModal = ({ task, onClose, onUpdated }) => {
 
           <div className="flex flex-col gap-1.5">
             <label className={labelCls}>Assign To</label>
-            <select name="assignedTo" value={form.assignedTo} onChange={handleChange}
-              className={`${inputCls} custom-select cursor-pointer`}>
-              <option value="">— Unassigned —</option>
-              {talents.map((t) => <option key={t._id} value={t._id}>{t.name} ({t.email})</option>)}
-            </select>
+            <CustomSelect
+              name="assignedTo"
+              value={form.assignedTo}
+              onChange={handleChange}
+              options={[
+                { value: '', label: '— Unassigned —' },
+                ...talents.map(t => ({ value: t._id, label: `${t.name} (${t.email})` }))
+              ]}
+              placeholder="Select assignee"
+            />
           </div>
 
           <div className="flex justify-end gap-2.5 pt-1 border-t border-border mt-1">

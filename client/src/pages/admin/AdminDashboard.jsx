@@ -3,6 +3,7 @@ import Sidebar from '../../components/admin/Sidebar';
 import TasksTable from '../../components/admin/TasksTable';
 import CreateTaskModal from '../../components/admin/CreateTaskModal';
 import EditTaskModal from '../../components/admin/EditTaskModal';
+import CustomSelect from '../../components/CustomSelect';
 import { fetchAllTasks } from '../../api/tasks';
 
 /* ── Search icon ── */
@@ -141,18 +142,19 @@ const AdminDashboard = () => {
               </div>
 
               {/* Status filter */}
-              <select
+              <CustomSelect
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="search-input-glass custom-select"
-                style={{ paddingLeft: '12px', cursor: 'pointer' }}>
-                <option value="All">All Status</option>
-                <option value="Open">Open</option>
-                <option value="Claimed">Claimed</option>
-                <option value="Submitted">Submitted</option>
-                <option value="Approved">Approved</option>
-                <option value="Rejected">Rejected</option>
-              </select>
+                options={[
+                  { value: 'All', label: 'All Status' },
+                  { value: 'Open', label: 'Open' },
+                  { value: 'Claimed', label: 'Claimed' },
+                  { value: 'Submitted', label: 'Submitted' },
+                  { value: 'Approved', label: 'Approved' },
+                  { value: 'Rejected', label: 'Rejected' }
+                ]}
+                className="w-auto min-w-[140px]"
+              />
             </div>
           </div>
 

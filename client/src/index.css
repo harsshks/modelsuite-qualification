@@ -435,6 +435,23 @@ input, select, textarea {
   padding-right: 36px !important;
 }
 
+/* Custom select options styling - ensures dropdown options have proper colors */
+.custom-select option {
+  background-color: #0D0D0D !important; /* --color-bg-surface */
+  color: #F0F0F0 !important; /* --color-text-primary */
+  padding: 8px 12px;
+}
+
+/* Additional styling for better option visibility */
+.custom-select option:checked {
+  background-color: #3B82F6 !important; /* --color-primary */
+  color: #FFFFFF !important;
+}
+
+.custom-select option:hover {
+  background-color: rgba(255, 255, 255, 0.04) !important; /* --color-bg-hover */
+}
+
 /* Hidden file input */
 .file-input-hidden { display: none; }
 
