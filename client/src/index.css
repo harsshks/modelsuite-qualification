@@ -33,14 +33,31 @@
 }
 
 /* ─────────────────────────────────────────
+   Premium Midnight Variant
+───────────────────────────────────────── */
+[data-theme="midnight"] {
+  --color-secondary:     #94A3B8;
+  --color-bg-dark:       #0f172a;
+  --color-bg-surface:    #1e293b;
+  --color-bg-card:       #1e293b;
+  --color-bg-input:      rgba(255, 255, 255, 0.08);
+  --color-bg-hover:      rgba(255, 255, 255, 0.06);
+  --color-border:        rgba(148, 163, 184, 0.15);
+  --color-border-light:  rgba(148, 163, 184, 0.25);
+  --color-text-primary:  #F8FAFC;
+  --color-text-muted:    #94A3B8;
+  --color-text-faint:    rgba(248, 250, 252, 0.4);
+}
+
+/* ─────────────────────────────────────────
    Base
 ───────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; }
 
 body {
   font-family: 'Inter', 'Poppins', sans-serif;
-  background: #050505;
-  color: #F0F0F0;
+  background: var(--color-bg-dark, #050505);
+  color: var(--color-text-primary, #F0F0F0);
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased;
@@ -132,6 +149,30 @@ body {
 .table-row-animate:nth-child(4) { animation-delay: 0.20s; }
 .table-row-animate:nth-child(5) { animation-delay: 0.25s; }
 .table-row-animate:nth-child(n+6) { animation-delay: 0.30s; }
+
+/* ─────────────────────────────────────────
+   Premium Utilities & Micro-animations
+───────────────────────────────────────── */
+.hover-lift {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.2s;
+}
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  border-color: var(--color-border-light);
+}
+
+[data-theme="midnight"] .hover-lift:hover {
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 0 20px rgba(59, 130, 246, 0.15);
+}
+
+.premium-glow {
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="midnight"] .premium-glow {
+  box-shadow: 0 0 25px rgba(59, 130, 246, 0.08);
+}
 
 /* ─────────────────────────────────────────
    Typography

@@ -86,12 +86,11 @@ const TasksTable = ({ tasks, onEdit, onRefresh }) => {
 
               {/* Title + description */}
               <td className="table-td" style={{ maxWidth: '260px' }}>
-                <span className="block font-semibold truncate"
-                  style={{ color: '#E5E2E1', fontFamily: 'Inter, sans-serif', marginBottom: '2px' }}>
+                <span className="block font-semibold truncate text-text-primary font-body mb-[2px]">
                   {task.title || '—'}
                 </span>
                 {task.description && (
-                  <span className="block truncate" style={{ color: '#4B5563', fontSize: '12px', maxWidth: '240px' }}>
+                  <span className="block truncate text-text-muted text-[12px] max-w-[240px]">
                     {task.description}
                   </span>
                 )}

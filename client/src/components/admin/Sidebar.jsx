@@ -39,6 +39,12 @@ const IconLogout = () => (
   </svg>
 );
 
+const IconTheme = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+  </svg>
+);
+
 const navItems = [
   { label: 'Dashboard',   path: '/admin/dashboard',   Icon: IconDashboard   },
   { label: 'Tasks',       path: '/admin/tasks',       Icon: IconTasks       },
@@ -52,8 +58,7 @@ const Sidebar = () => {
   const location  = useLocation();
 
   return (
-    <aside className="fixed inset-y-0 left-0 w-[240px] flex flex-col z-50"
-      style={{ background: '#0D0D0D' }}>
+    <aside className="fixed inset-y-0 left-0 w-[240px] flex flex-col z-50 bg-bg-surface">
 
       {/* Brand */}
       <div className="flex items-center justify-center px-5 py-6">
@@ -64,8 +69,7 @@ const Sidebar = () => {
 
       {/* Nav */}
       <nav className="flex flex-col gap-0.5 flex-1 px-3 pt-5">
-        <p className="text-[9.5px] font-semibold uppercase tracking-[0.12em] px-2 mb-2"
-          style={{ color: 'rgba(255,255,255,0.25)', fontFamily: 'Inter, sans-serif' }}>
+        <p className="text-[9.5px] font-semibold uppercase tracking-[0.12em] px-2 mb-2 text-text-faint font-body">
           Menu
         </p>
 
@@ -91,20 +95,30 @@ const Sidebar = () => {
               {user?.name?.[0]?.toUpperCase() ?? 'A'}
             </div>
             <div className="min-w-0">
-              <p className="text-[13px] font-semibold truncate max-w-[110px]"
-                style={{ color: '#E5E2E1', fontFamily: 'Inter, sans-serif' }}>
+              <p className="text-[13px] font-semibold truncate max-w-[110px] text-text-primary font-body">
                 {user?.name}
               </p>
-              <p className="text-[11px]" style={{ color: '#4B5563' }}>Admin</p>
+              <p className="text-[11px] text-text-muted">Admin</p>
             </div>
           </div>
 
-          <button
-            onClick={() => { logout(); navigate('/login'); }}
-            title="Sign out"
-            className="logout-btn">
-            <IconLogout />
-          </button>
+          <div className="flex gap-1 shrink-0">
+            <button
+              onClick={() => {
+                const isMidnight = document.body.getAttribute('data-theme') === 'midnight';
+                document.body.setAttribute('data-theme', isMidnight ? '' : 'midnight');
+              }}
+              title="Toggle Theme"
+              className="logout-btn">
+              <IconTheme />
+            </button>
+            <button
+              onClick={() => { logout(); navigate('/login'); }}
+              title="Sign out"
+              className="logout-btn">
+              <IconLogout />
+            </button>
+          </div>
         </div>
       </div>
     </aside>

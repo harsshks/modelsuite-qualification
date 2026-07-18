@@ -68,8 +68,8 @@ const LoginPage = () => {
       </div>
 
       {/* ── Right: Visual panel ── */}
-      <div className="hidden lg:flex flex-col items-center justify-center relative overflow-hidden p-16 animate-fade-in min-h-screen"
-        style={{ background: 'linear-gradient(140deg, #050505 0%, #111111 50%, #000000 100%)', animationDelay: '0.1s', animationFillMode: 'both' }}>
+      <div className="hidden lg:flex flex-col items-center justify-center relative overflow-hidden p-16 animate-fade-in min-h-screen bg-gradient-to-br from-bg-dark via-bg-surface to-black"
+        style={{ animationDelay: '0.1s', animationFillMode: 'both' }}>
         
         {/* Top Right Info Icon */}
         <div className="absolute top-12 right-12 group z-50">
