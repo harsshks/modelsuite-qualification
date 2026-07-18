@@ -74,7 +74,7 @@ const SubmissionsPage = () => {
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full border-collapse text-sm">
+              <table className="w-full border-collapse text-sm table-fixed">
                 <thead>
                   <tr className="bg-bg-surface">
                     <th className={thCls}>Task</th>
